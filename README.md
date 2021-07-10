@@ -23,7 +23,7 @@ $app->configure('database');
 ```
 
 ```php
-// Change the route
+// Change the route in app.php
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
     'prefix' => 'v1'
