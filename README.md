@@ -7,7 +7,7 @@ composer require milyoona/model-consumer
 ```
 
 ```php
-// Register Service Providers
+// Register Service Provider to app.php
 $app->register(Milyoona\ModelConsumer\ModelConsumerServiceProvider::class);
 ```
 
@@ -16,13 +16,13 @@ php artisan vendor:publish --tag=consumer
 ```
 
 ```php
-// Register Config Files
+// Add Config Files to app.php
 $app->configure('amqp');
 $app->configure('consumer');
 $app->configure('database');
 ```
 
-#### How to use
+#### How to publish migrations
 
 Set settings in <code>config file</code> and Run this command
 
@@ -30,7 +30,7 @@ Set settings in <code>config file</code> and Run this command
 php artisan milyoona:install
 ```
 
-#### How to publish on queue
+#### How to <code>publish</code> on queue
 
 ```php
 // In Repository
@@ -39,7 +39,7 @@ Amqp::publish( 'users', json_encode( ['method' => 'store', 'data' => $user->setA
 return $user->setAppends( ['full_name'] );
 ```
 
-#### How to consume
+#### How to <code>consume</code> from queue
 
 ```bash
 php artisan milyoona:consume
