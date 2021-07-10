@@ -56,10 +56,12 @@ class ModelConsumerServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations/news');
 
         // Base migrations
-        foreach( array_diff(scandir(__DIR__.'/database/migrations/base'), array('.', '..')) as $migration) {
-            $this->publishes([
-                __DIR__.'/database/migrations/base/' . $migration => lumen_database_path(date('Y_m_d_') . str_pad(array_search(basename($migration, '.php'), getMigrations()) + 1, 6, '0', STR_PAD_LEFT) . '_create_' . basename($migration, '.php') .  '_table.php')
-            ], 'consumer_' . basename($migration, '.php') );
+        if (!empty(getMigrations())) {
+            foreach( array_diff(scandir(__DIR__.'/database/migrations/base'), array('.', '..')) as $migration) {
+                $this->publishes([
+                    __DIR__.'/database/migrations/base/' . $migration => lumen_database_path(date('Y_m_d_') . str_pad(array_search(basename($migration, '.php'), getMigrations()) + 1, 6, '0', STR_PAD_LEFT) . '_create_' . basename($migration, '.php') .  '_table.php')
+                ], 'consumer_' . basename($migration, '.php') );
+            }
         }
     }
 }

@@ -24,10 +24,14 @@ $app->configure('database');
 
 #### How to publish migrations
 
-Set settings in <code>config file</code> and Run this command
+Set configs in <code>config/consumer.php</code> and Run this command
 
 ```bash
+// publish migrations
 php artisan milyoona:install
+
+// and migrate
+php artisan migrate
 ```
 
 #### How to <code>publish</code> on queue
