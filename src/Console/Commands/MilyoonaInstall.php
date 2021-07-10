@@ -18,7 +18,7 @@ class MilyoonaInstall extends Command
      *
      * @var string
      */
-    protected $description = 'Publish migrations and config for this microservice';
+    protected $description = 'Publish migrations for this microservice';
 
     /**
      * Create a new command instance.
@@ -37,44 +37,33 @@ class MilyoonaInstall extends Command
      */
     public function handle()
     {
-        if( !empty(config('milyoona_model_consumer.publish_migration')) ) {
+        $publishedCount = 0;
 
-            foreach(config('milyoona_model_consumer.publish_migration') as $migration) {
-                // Base migrations
-                if(strpos($migration, ':') != false) {
-                    $migrations = array_diff(scandir(app()->basePath() . '/database/migrations'), array('.', '..', '.gitkeep'));
-                    if(!empty($migrations)) {
-                        $flag = false;
-                        foreach($migrations as $item) {
-                            if( strpos($item, rtrim($migration, ':')) != false ) {
-                                $flag = true;
-                            }
+        if( !empty(config('consumer.publish_migration')) ) {
+
+            foreach(config('consumer.publish_migration') as $migration) {
+                $migrations = array_diff(scandir(app()->basePath() . '/database/migrations'), array('.', '..', '.gitkeep'));
+                if(!empty($migrations)) {
+                    $flag = false;
+                    foreach($migrations as $item) {
+                        if( strpos($item, rtrim($migration, ':')) != false ) {
+                            $flag = true;
                         }
-                        if($flag == false) {
-                            $this->call('vendor:publish', ['--tag' => 'base_' . rtrim($migration, ':')]);
-                        }
-                    } else {
-                        $this->call('vendor:publish', ['--tag' => 'base_' . rtrim($migration, ':')]);
+                    }
+                    if($flag == false) {
+                        $this->call('vendor:publish', ['--tag' => 'consumer_' . rtrim($migration, ':')]);
+                        $publishedCount++;
                     }
                 } else {
-                    // Free migrations
-                    $migrations = array_diff(scandir(app()->basePath() . '/database/migrations'), array('.', '..', '.gitkeep'));
-                    if(!empty($migrations)) {
-                        $flag = false;
-                        foreach($migrations as $item) {
-                            if( strpos($item, $migration) != false ) {
-                                $flag = true;
-                            }
-                        }
-                        if($flag == false) {
-                            $this->call('vendor:publish', ['--tag' => 'free_' . $migration]);
-                        }
-                    } else {
-                        $this->call('vendor:publish', ['--tag' => 'free_' . $migration]);
-                    }
+                    $this->call('vendor:publish', ['--tag' => 'consumer_' . rtrim($migration, ':')]);
+                    $publishedCount++;
                 }
             }
         }
-        $this->info('Successfully Published!');
+        if ($publishedCount > 0) {
+            $this->info($publishedCount .  ' Migration Successfully Published!');
+        } else {
+            $this->warn('Already published, Not exists to publish!');
+        }
     }
 }

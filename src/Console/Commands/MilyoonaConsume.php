@@ -4,23 +4,22 @@ namespace Milyoona\ModelConsumer\Console\Commands;
 
 use Bschmitt\Amqp\Facades\Amqp;
 use Illuminate\Console\Command;
-use Milyoona\ModelConsume\Models\User;
 
-class UserConsumer extends Command
+class MilyoonaConsume extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'consumer:user';
+    protected $signature = 'milyoona:consume';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'User consumer command';
+    protected $description = 'Milyoona Model Consumer Command';
 
     /**
      * Create a new command instance.
@@ -39,27 +38,17 @@ class UserConsumer extends Command
      */
     public function handle()
     {
-        Amqp::consume(config('milyoona_model_consumer.queue_name'), function ($message, $resolver) {
+        Amqp::consume(config('consumer.queue_name'), function ($message, $resolver) {
+
+            $routingKey = $message->delivery_info['routing_key'];
             $method = json_decode($message->body, true)['method'];
             $data = json_decode($message->body, true)['data'];
 
-            switch($method) {
-                case 'store':
-                    User::create($data);
-                    break;
-                case 'update':
-                    User::where('id', $data['id'])->updade($data);
-                    break;
-                case 'delete':
-                    User::where('id', $data['id'])->delete();
-                    break;
-                case 'forceDelete':
-                    User::where('id', $data['id'])->forceDelete();
-                    break;
-            }
+            consumerCrud($routingKey, $method, $data);
+
             $resolver->acknowledge($message);
         }, [
-                'routing' => 'user',
+                'routing' => getMigrations(),
                 'persistent' => true
         ]);
     }
