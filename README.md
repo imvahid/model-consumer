@@ -27,10 +27,12 @@ $app->configure('database');
 Set configs in <code>config/consumer.php</code> and Run this command
 
 ```bash
-// publish migrations
 php artisan milyoona:install
 
-// and migrate
+// If you want to generate key in .env
+php artisan key:generate
+
+// Config your database information in .env then run this command
 php artisan migrate
 ```
 
