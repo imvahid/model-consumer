@@ -1,0 +1,28 @@
+{
+    "name": "milyoona/model-consumer",
+    "description": "Model consumer for lumen projects",
+    "keywords": [],
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "anik/form-request": "^4.2",
+        "bschmitt/laravel-amqp": "^2.0",
+        "flipbox/lumen-generator": "^8.2",
+        "laravel/lumen-framework": "^8.0",
+        "laravelista/lumen-vendor-publish": "^8.0"
+    },
+    "authors": [
+        {
+            "name": "Milyoona",
+            "email": "hi@milyoona.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Milyoona\\ModelConsumer\\": "src/"
+        },
+        "files": [
+            "src/Helper/functions.php"
+        ]
+    }
+}
