@@ -32,9 +32,15 @@ php artisan milyoona:install
 
 #### How to publish on queue
 
-```bash
+```php
 // In Repository
 Amqp::publish( 'users', json_encode( ['method' => 'store', 'data' => $user->setAppends([])] ) ); // method: store, update, delete, forceDelete
 
 return $user->setAppends( ['full_name'] );
+```
+
+#### How to consume
+
+```bash
+php artisan milyoona:consume
 ```
