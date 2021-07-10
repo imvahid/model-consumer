@@ -22,6 +22,16 @@ $app->configure('consumer');
 $app->configure('database');
 ```
 
+```php
+// Change the route
+$app->router->group([
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'v1'
+], function ($router) {
+    require __DIR__.'/../routes/web.php';
+});
+```
+
 #### How to publish migrations
 
 Set configs in <code>config/consumer.php</code> and Run this command
